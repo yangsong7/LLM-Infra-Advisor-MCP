@@ -1,0 +1,59 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "infra-advisor-mcp"
+version = "0.1.0"
+description = "MCP server that estimates AI infrastructure requirements, costs, and recommendations"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "infra-advisor-mcp contributors", email = "sendoh.yang@gmail.com" }]
+keywords = ["mcp", "llm", "gpu", "infrastructure", "cost-estimation", "tco", "fastmcp"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "fastmcp>=2.0.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0",
+    "httpx>=0.27.0",
+    "rich>=13.0.0",
+    "beautifulsoup4>=4.12.0",
+    "markdown>=3.6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.4.0",
+]
+# Only needed to run scripts/sync_cloud_pricing.py against the AWS Price List API.
+# (GCP uses the Cloud Billing Catalog REST API via httpx — no extra dep.)
+sync = [
+    "boto3>=1.34.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/c3-yang-song/infra-advisor-mcp"
+Repository = "https://github.com/c3-yang-song/infra-advisor-mcp"
+Issues = "https://github.com/c3-yang-song/infra-advisor-mcp/issues"
+
+[project.scripts]
+infra-advisor = "infra_advisor.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/infra_advisor"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100

@@ -1,0 +1,129 @@
+aws:
+  instances:
+    p5_48xlarge:
+      gpus: 8
+      gpu_type: h100_sxm
+      vcpus: 192
+      ram_gb: 2048
+      networking_gbps: 3200
+      on_demand_per_hr: 98.32
+      on_demand_per_gpu_hr: 12.29
+      spot_per_hr: null
+      storage: 8x 3.84TB NVMe
+      last_updated: '2026-01-01'
+    p4de_24xlarge:
+      gpus: 8
+      gpu_type: a100_80gb_sxm
+      vcpus: 96
+      ram_gb: 1152
+      networking_gbps: 400
+      on_demand_per_hr: 40.97
+      on_demand_per_gpu_hr: 5.12
+      spot_per_hr: 14.0
+      spot_per_gpu_hr: 1.75
+      last_updated: '2026-01-01'
+    p4d_24xlarge:
+      gpus: 8
+      gpu_type: a100_40gb
+      vcpus: 96
+      ram_gb: 1152
+      networking_gbps: 400
+      on_demand_per_hr: 32.77
+      on_demand_per_gpu_hr: 4.1
+      spot_per_hr: 9.83
+      spot_per_gpu_hr: 1.23
+      last_updated: '2026-01-01'
+    g6e_48xlarge:
+      gpus: 8
+      gpu_type: l40s
+      vcpus: 192
+      ram_gb: 768
+      networking_gbps: 400
+      on_demand_per_hr: 16.29
+      on_demand_per_gpu_hr: 2.04
+      spot_per_hr: 4.89
+      spot_per_gpu_hr: 0.61
+      last_updated: '2026-01-01'
+gcp:
+  instances:
+    a3_ultragpu_8g:
+      gpus: 8
+      gpu_type: h200_sxm
+      vcpus: 208
+      ram_gb: 1872
+      networking_gbps: 3200
+      on_demand_per_hr: 83.81
+      on_demand_per_gpu_hr: 10.48
+      spot_per_hr: 25.14
+      spot_per_gpu_hr: 3.14
+      last_updated: '2026-01-01'
+    a3_highgpu_8g:
+      gpus: 8
+      gpu_type: h100_sxm
+      vcpus: 208
+      ram_gb: 1872
+      networking_gbps: 3200
+      on_demand_per_hr: 72.91
+      on_demand_per_gpu_hr: 9.11
+      spot_per_hr: 21.87
+      spot_per_gpu_hr: 2.73
+      last_updated: '2026-01-01'
+    a2_ultragpu_8g:
+      gpus: 8
+      gpu_type: a100_80gb_sxm
+      vcpus: 96
+      ram_gb: 1360
+      networking_gbps: 200
+      on_demand_per_hr: 40.29
+      on_demand_per_gpu_hr: 5.04
+      spot_per_hr: 12.09
+      spot_per_gpu_hr: 1.51
+      last_updated: '2026-01-01'
+azure:
+  instances:
+    nd96isr_h100_v5:
+      gpus: 8
+      gpu_type: h100_sxm
+      vcpus: 96
+      ram_gb: 900
+      networking_gbps: 400
+      on_demand_per_hr: 98.32
+      on_demand_per_gpu_hr: 12.29
+      spot_per_hr: 19.66
+      spot_per_gpu_hr: 2.46
+      last_updated: '2026-01-01'
+    nd96amsr_a100_v4:
+      gpus: 8
+      gpu_type: a100_80gb_sxm
+      vcpus: 96
+      ram_gb: 900
+      networking_gbps: 400
+      on_demand_per_hr: 32.77
+      on_demand_per_gpu_hr: 4.1
+      spot_per_hr: 9.83
+      spot_per_gpu_hr: 1.23
+      last_updated: '2026-01-01'
+reserved_discounts:
+  aws:
+    1yr_no_upfront: 0.25
+    1yr_all_upfront: 0.35
+    3yr_all_upfront: 0.55
+  gcp:
+    1yr_cud: 0.37
+    3yr_cud: 0.55
+  azure:
+    1yr_reserved: 0.3
+    3yr_reserved: 0.5
+egress:
+  aws:
+    internet: 0.09
+    cross_region: 0.02
+    same_region: 0.0
+  gcp:
+    internet: 0.08
+    cross_region: 0.01
+    same_region: 0.0
+  azure:
+    internet: 0.087
+    cross_region: 0.02
+    same_region: 0.0

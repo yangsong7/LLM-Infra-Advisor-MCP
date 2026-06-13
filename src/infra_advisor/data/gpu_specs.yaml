@@ -1,0 +1,223 @@
+# GPU specifications and pricing
+# cloud_on_demand: USD per hour (single GPU)
+# cloud_spot_multiplier: typical spot discount vs on-demand
+# buy_price_usd: approximate retail/market price per GPU
+# tdp_watts: thermal design power
+# mfu: typical model FLOPs utilization for training on this GPU (0-1)
+# inference_throughput_tps: single-GPU tokens/sec by model-size bucket (bs=1, fp16)
+# last_updated: YYYY-MM-DD
+
+gpus:
+  h200_sxm:
+    name: "NVIDIA H200 SXM"
+    vram_gb: 141
+    fp16_tflops: 1979
+    bf16_tflops: 1979
+    fp8_tflops: 3958
+    memory_bandwidth_tbps: 4.8
+    interconnect: "NVLink 4.0"
+    tdp_watts: 700
+    cloud_on_demand:
+      aws: null          # not yet available as single instance
+      gcp: 10.48         # a3-ultragpu-8g divided by 8
+      azure: null
+      lambda: 3.99
+      coreweave: 4.25
+    cloud_spot_multiplier: 0.35
+    buy_price_usd: 40000
+    mfu: 0.55
+    inference_throughput_tps:
+      7b: 150
+      13b: 100
+      70b: 32
+      405b: 5
+    last_updated: "2026-01-01"
+
+  h100_sxm:
+    name: "NVIDIA H100 SXM"
+    vram_gb: 80
+    fp16_tflops: 1979
+    bf16_tflops: 1979
+    fp8_tflops: 3958
+    memory_bandwidth_tbps: 3.35
+    interconnect: "NVLink 4.0"
+    tdp_watts: 700
+    cloud_on_demand:
+      aws: 9.83          # p5.48xlarge / 8
+      gcp: 9.12          # a3-highgpu-8g / 8
+      azure: 9.07        # Standard_ND96isr_H100_v5 / 8
+      lambda: 2.49
+      coreweave: 2.79
+    cloud_spot_multiplier: 0.35
+    buy_price_usd: 30000
+    mfu: 0.50
+    inference_throughput_tps:
+      7b: 120
+      13b: 80
+      70b: 25
+      405b: 4
+    last_updated: "2026-01-01"
+
+  h100_pcie:
+    name: "NVIDIA H100 PCIe"
+    vram_gb: 80
+    fp16_tflops: 1513
+    bf16_tflops: 1513
+    fp8_tflops: 3026
+    memory_bandwidth_tbps: 2.0
+    interconnect: "PCIe 5.0"
+    tdp_watts: 350
+    cloud_on_demand:
+      aws: null
+      gcp: 7.40
+      azure: null
+      lambda: 1.99
+      coreweave: 2.25
+    cloud_spot_multiplier: 0.40
+    buy_price_usd: 25000
+    mfu: 0.40
+    last_updated: "2026-01-01"
+
+  a100_80gb_sxm:
+    name: "NVIDIA A100 80GB SXM"
+    vram_gb: 80
+    fp16_tflops: 312
+    bf16_tflops: 312
+    fp8_tflops: null
+    memory_bandwidth_tbps: 2.0
+    interconnect: "NVLink 3.0"
+    tdp_watts: 400
+    cloud_on_demand:
+      aws: 4.10          # p4de.24xlarge / 8
+      gcp: 3.67          # a2-ultragpu-8g / 8
+      azure: 3.40        # Standard_ND96amsr_A100_v4 / 8
+      lambda: 1.29
+      coreweave: 2.06
+    cloud_spot_multiplier: 0.40
+    buy_price_usd: 10000
+    mfu: 0.45
+    inference_throughput_tps:
+      7b: 80
+      13b: 55
+      70b: 18
+      405b: 3
+    last_updated: "2026-01-01"
+
+  a100_40gb:
+    name: "NVIDIA A100 40GB"
+    vram_gb: 40
+    fp16_tflops: 312
+    bf16_tflops: 312
+    fp8_tflops: null
+    memory_bandwidth_tbps: 1.555
+    interconnect: "NVLink 3.0"
+    tdp_watts: 300
+    cloud_on_demand:
+      aws: 3.21          # p4d.24xlarge / 8
+      gcp: 2.93
+      azure: null
+      lambda: 1.10
+      coreweave: 1.60
+    cloud_spot_multiplier: 0.40
+    buy_price_usd: 6000
+    mfu: 0.42
+    inference_throughput_tps:
+      7b: 65
+      13b: 40
+      70b: 12
+      405b: null
+    last_updated: "2026-01-01"
+
+  rtx_4090:
+    name: "NVIDIA RTX 4090"
+    vram_gb: 24
+    fp16_tflops: 330
+    bf16_tflops: 330
+    fp8_tflops: null
+    memory_bandwidth_tbps: 1.008
+    interconnect: "PCIe 4.0"
+    tdp_watts: 450
+    cloud_on_demand:
+      aws: null
+      gcp: null
+      azure: null
+      lambda: 0.69
+      vast_ai: 0.35
+    cloud_spot_multiplier: 0.50
+    buy_price_usd: 1599
+    mfu: 0.35
+    inference_throughput_tps:
+      7b: 90
+      13b: 50
+      70b: null
+      405b: null
+    last_updated: "2026-01-01"
+
+  rtx_3090:
+    name: "NVIDIA RTX 3090"
+    vram_gb: 24
+    fp16_tflops: 142
+    bf16_tflops: 142
+    fp8_tflops: null
+    memory_bandwidth_tbps: 0.936
+    interconnect: "PCIe 4.0"
+    tdp_watts: 350
+    cloud_on_demand:
+      vast_ai: 0.20
+    cloud_spot_multiplier: 0.55
+    buy_price_usd: 700
+    mfu: 0.30
+    last_updated: "2026-01-01"
+
+  l40s:
+    name: "NVIDIA L40S"
+    vram_gb: 48
+    fp16_tflops: 733
+    bf16_tflops: 733
+    fp8_tflops: 1457
+    memory_bandwidth_tbps: 0.864
+    interconnect: "PCIe 4.0"
+    tdp_watts: 350
+    cloud_on_demand:
+      aws: 1.63          # g6e series
+      gcp: null
+      azure: null
+      lambda: 1.20
+      coreweave: 1.43
+    cloud_spot_multiplier: 0.45
+    buy_price_usd: 8000
+    mfu: 0.38
+    inference_throughput_tps:
+      7b: 85
+      13b: 55
+      70b: 15
+      405b: null
+    last_updated: "2026-01-01"
+
+# On-prem infrastructure add-ons (per GPU per month)
+onprem_overhead:
+  power_cost_kwh_usd: 0.12          # average US commercial rate
+  pue: 1.4                          # power usage effectiveness (cooling overhead)
+  rack_cost_per_gpu_month: 50       # colocation or own datacenter amortized
+  networking_per_gpu_month: 30      # InfiniBand / ethernet
+  maintenance_labor_per_gpu_month: 40
+  hardware_depreciation_years: 4
+  software_license_per_gpu_month: 20   # monitoring, security, management tooling
+  ml_infra_salary_usd_year: 250000     # US, fully loaded (benefits + overhead)
+  # ML-infra staffing tiers: [max_gpus, recommended_fte]. Clusters above the last
+  # tier scale at gpu_count / 128 FTE (see _estimate_fte fallback).
+  ml_infra_fte_tiers:
+    - [8, 0.5]
+    - [32, 1.0]
+    - [128, 2.0]
+    - [512, 4.0]
+
+# Report orchestration policy (not pricing, but tunable planning defaults).
+planning:
+  default_utilization: 0.70
+  # Reference cluster size used to size the TCO comparison by workload scale.
+  scale_gpu_counts:
+    personal: 1
+    startup: 2
+    mid_market: 4
+    enterprise: 8

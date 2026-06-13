@@ -1,0 +1,333 @@
+# Model registry: open-source and closed-source models
+# params_b: billions of parameters
+# min_vram_inference_gb: minimum VRAM for inference at fp16 (no quantization)
+# min_vram_inference_int4_gb: minimum VRAM with 4-bit quantization
+# flops_per_token: approximate FLOPs per forward pass token
+# context_window: max tokens
+# last_updated: YYYY-MM-DD
+
+open_source:
+  llama3_405b:
+    name: "Meta LLaMA 3.1 405B"
+    params_b: 405
+    architecture: "dense transformer"
+    min_vram_inference_gb: 810      # fp16
+    min_vram_inference_int4_gb: 203
+    recommended_gpu_inference: "8x h100_sxm"
+    flops_per_token: 810e9
+    context_window: 128000
+    strengths: ["general purpose", "reasoning", "multilingual", "instruction following"]
+    use_cases: ["enterprise chatbot", "code generation", "research", "rag"]
+    license: "llama3"
+    last_updated: "2026-01-01"
+
+  llama3_70b:
+    name: "Meta LLaMA 3.1 70B"
+    params_b: 70
+    architecture: "dense transformer"
+    min_vram_inference_gb: 140
+    min_vram_inference_int4_gb: 35
+    recommended_gpu_inference: "2x h100_sxm or 4x a100_40gb"
+    flops_per_token: 140e9
+    context_window: 128000
+    strengths: ["general purpose", "instruction following", "coding"]
+    use_cases: ["chatbot", "summarization", "code assistance", "rag"]
+    license: "llama3"
+    last_updated: "2026-01-01"
+
+  llama3_8b:
+    name: "Meta LLaMA 3.1 8B"
+    params_b: 8
+    architecture: "dense transformer"
+    min_vram_inference_gb: 16
+    min_vram_inference_int4_gb: 4
+    recommended_gpu_inference: "1x rtx_4090 or 1x a100_40gb"
+    flops_per_token: 16e9
+    context_window: 128000
+    strengths: ["efficient", "fast inference", "fine-tuning friendly"]
+    use_cases: ["edge deployment", "sft target", "low-latency chatbot"]
+    license: "llama3"
+    last_updated: "2026-01-01"
+
+  mistral_7b:
+    name: "Mistral 7B v0.3"
+    params_b: 7
+    architecture: "dense transformer"
+    min_vram_inference_gb: 14
+    min_vram_inference_int4_gb: 4
+    recommended_gpu_inference: "1x rtx_4090"
+    flops_per_token: 14e9
+    context_window: 32768
+    strengths: ["efficient", "sliding window attention", "permissive license"]
+    use_cases: ["fine-tuning base", "edge", "production chatbot"]
+    license: "apache-2.0"
+    last_updated: "2026-01-01"
+
+  mixtral_8x7b:
+    name: "Mistral Mixtral 8x7B"
+    params_b: 56           # total params; active ~13B per token
+    active_params_b: 13
+    architecture: "mixture-of-experts"
+    min_vram_inference_gb: 90
+    min_vram_inference_int4_gb: 24
+    recommended_gpu_inference: "2x a100_40gb or 1x h100_sxm"
+    flops_per_token: 26e9  # 2x active params
+    context_window: 32768
+    strengths: ["MoE efficiency", "strong reasoning", "multilingual"]
+    use_cases: ["cost-efficient serving", "multilingual NLP"]
+    license: "apache-2.0"
+    last_updated: "2026-01-01"
+
+  qwen2_72b:
+    name: "Qwen 2.5 72B"
+    params_b: 72
+    architecture: "dense transformer"
+    min_vram_inference_gb: 144
+    min_vram_inference_int4_gb: 36
+    recommended_gpu_inference: "2x h100_sxm or 4x a100_40gb"
+    flops_per_token: 144e9
+    context_window: 131072
+    strengths: ["multilingual", "coding", "math", "long context"]
+    use_cases: ["asian language tasks", "code generation", "math reasoning"]
+    license: "apache-2.0"
+    last_updated: "2026-01-01"
+
+  deepseek_r1_671b:
+    name: "DeepSeek R1 671B"
+    params_b: 671
+    active_params_b: 37    # MoE: ~37B active per token
+    architecture: "mixture-of-experts"
+    min_vram_inference_gb: 1342
+    min_vram_inference_int4_gb: 336
+    recommended_gpu_inference: "16x h100_sxm"
+    flops_per_token: 74e9
+    context_window: 128000
+    strengths: ["reasoning", "math", "coding", "chain-of-thought"]
+    use_cases: ["complex reasoning", "research", "math/science tasks"]
+    license: "mit"
+    last_updated: "2026-01-01"
+
+  gemma2_27b:
+    name: "Google Gemma 2 27B"
+    params_b: 27
+    architecture: "dense transformer"
+    min_vram_inference_gb: 54
+    min_vram_inference_int4_gb: 14
+    recommended_gpu_inference: "1x h100_sxm or 2x a100_40gb"
+    flops_per_token: 54e9
+    context_window: 8192
+    strengths: ["efficient", "safety-tuned", "Google ecosystem"]
+    use_cases: ["enterprise chatbot", "summarization", "classification"]
+    license: "gemma"
+    last_updated: "2026-01-01"
+
+closed_source:
+  gpt4o:
+    name: "OpenAI GPT-4o"
+    provider: "openai"
+    params_b: null         # undisclosed
+    context_window: 128000
+    strengths: ["multimodal", "reasoning", "coding", "general purpose"]
+    use_cases: ["enterprise", "coding assistant", "vision tasks", "agents"]
+    pricing:
+      input_per_1m_tokens: 2.50
+      output_per_1m_tokens: 10.00
+      batch_input_per_1m_tokens: 1.25
+      batch_output_per_1m_tokens: 5.00
+    vision_capable: true
+    image_pricing:
+      # OpenAI tile-based: 85 base tokens + 170 per 512×512 tile. Images rescaled to fit
+      # 2048×2048, then shortest side to 768px before tiling. 1024×1024 → 4 tiles = 765 tokens.
+      # Low detail is a fixed 85 tokens regardless of resolution.
+      # VERIFY: https://platform.openai.com/docs/guides/vision — these numbers change with model updates.
+      low_detail_tokens: 85
+      high_detail_tokens_1024px: 765
+      pricing_model: "tile_based"
+    last_updated: "2026-06-01"
+
+  gpt4o_mini:
+    name: "OpenAI GPT-4o Mini"
+    provider: "openai"
+    params_b: null
+    context_window: 128000
+    strengths: ["low cost", "fast", "sufficient for most tasks"]
+    use_cases: ["high-volume apps", "classification", "simple chat"]
+    pricing:
+      input_per_1m_tokens: 0.15
+      output_per_1m_tokens: 0.60
+      batch_input_per_1m_tokens: 0.075
+      batch_output_per_1m_tokens: 0.30
+    vision_capable: true
+    image_pricing:
+      # Same tile formula as GPT-4o; per-token rate is cheaper.
+      # VERIFY: https://platform.openai.com/docs/guides/vision
+      low_detail_tokens: 85
+      high_detail_tokens_1024px: 765
+      pricing_model: "tile_based"
+    last_updated: "2026-06-01"
+
+  claude_sonnet_4:
+    name: "Anthropic Claude Sonnet 4"
+    provider: "anthropic"
+    params_b: null
+    context_window: 200000
+    strengths: ["reasoning", "coding", "long context", "agentic tasks"]
+    use_cases: ["coding assistant", "analysis", "research", "agents"]
+    pricing:
+      input_per_1m_tokens: 3.00
+      output_per_1m_tokens: 15.00
+      batch_input_per_1m_tokens: 1.50
+      batch_output_per_1m_tokens: 7.50
+    vision_capable: false
+    last_updated: "2026-06-01"
+
+  claude_haiku_4:
+    name: "Anthropic Claude Haiku 4"
+    provider: "anthropic"
+    params_b: null
+    context_window: 200000
+    strengths: ["fast", "low cost", "long context"]
+    use_cases: ["high-volume", "classification", "summarization", "triage"]
+    pricing:
+      input_per_1m_tokens: 1.00
+      output_per_1m_tokens: 5.00
+      batch_input_per_1m_tokens: 0.50
+      batch_output_per_1m_tokens: 2.50
+    vision_capable: true
+    image_pricing:
+      # Anthropic charges image tokens at the same rate as text tokens.
+      # Approximate: ~1590 tokens for a 1024×1024 image (based on documented image sizing).
+      # VERIFY: https://docs.anthropic.com/en/docs/build-with-claude/vision — Anthropic's formula
+      # is 1.5 × (width × height / 750), so 1024×1024 ≈ 1398 tokens.
+      high_detail_tokens_1024px: 1398
+      pricing_model: "token_based"
+    last_updated: "2026-06-01"
+
+  gemini_1_5_pro:
+    name: "Google Gemini 1.5 Pro"
+    provider: "google"
+    params_b: null
+    context_window: 2000000
+    strengths: ["ultra-long context", "multimodal", "reasoning"]
+    use_cases: ["document analysis", "video understanding", "very long context"]
+    pricing:
+      input_per_1m_tokens: 1.25
+      output_per_1m_tokens: 5.00
+      batch_input_per_1m_tokens: 0.625
+      batch_output_per_1m_tokens: 2.50
+    vision_capable: true
+    image_pricing:
+      # Google token-based: ~258 tokens per image tile (512×512). A 1024×1024 image = 4 tiles = 1032 tokens.
+      # VERIFY: https://ai.google.dev/gemini-api/docs/vision — Google's formula changes across model versions.
+      high_detail_tokens_1024px: 1032
+      pricing_model: "token_based"
+    last_updated: "2026-06-01"
+
+  gemini_flash_2:
+    name: "Google Gemini 2.0 Flash"
+    provider: "google"
+    params_b: null
+    context_window: 1000000
+    strengths: ["fast", "cheap", "long context", "multimodal"]
+    use_cases: ["high-volume", "real-time apps", "multimodal pipelines"]
+    pricing:
+      input_per_1m_tokens: 0.03
+      output_per_1m_tokens: 0.17
+    vision_capable: true
+    image_pricing:
+      # Same tile formula as Gemini 1.5 Pro at the cheaper Flash rate.
+      # VERIFY: https://ai.google.dev/gemini-api/docs/vision
+      high_detail_tokens_1024px: 1032
+      pricing_model: "token_based"
+    last_updated: "2026-06-01"
+
+  gemini_2_5_flash:
+    name: "Google Gemini 2.5 Flash"
+    provider: "google"
+    params_b: null
+    context_window: 1000000
+    strengths: ["fast", "cheap", "long context", "multimodal", "thinking"]
+    use_cases: ["high-volume", "real-time apps", "multimodal pipelines", "reasoning tasks"]
+    pricing:
+      input_per_1m_tokens: 0.30
+      output_per_1m_tokens: 2.50
+    vision_capable: true
+    image_pricing:
+      # Same tile formula as Gemini 2.0 Flash — verify if formula changed for 2.5 series.
+      # VERIFY: https://ai.google.dev/gemini-api/docs/vision
+      high_detail_tokens_1024px: 1032
+      pricing_model: "token_based"
+    last_updated: "2026-06-01"
+
+  gemini_2_5_pro:
+    name: "Google Gemini 2.5 Pro"
+    provider: "google"
+    params_b: null
+    context_window: 1000000
+    strengths: ["reasoning", "long context", "multimodal", "coding", "thinking"]
+    use_cases: ["complex reasoning", "document analysis", "multimodal", "agents"]
+    pricing:
+      input_per_1m_tokens: 1.25
+      output_per_1m_tokens: 10.00
+    vision_capable: true
+    image_pricing:
+      # VERIFY: https://ai.google.dev/gemini-api/docs/vision — 2.5 Pro image token formula may differ.
+      high_detail_tokens_1024px: 1032
+      pricing_model: "token_based"
+    last_updated: "2026-06-01"
+
+  mistral_large:
+    name: "Mistral Large 3"
+    provider: "mistral"
+    params_b: null
+    context_window: 128000
+    strengths: ["multilingual", "reasoning", "function calling", "instruction following"]
+    use_cases: ["enterprise Europe", "multilingual", "agents", "complex tasks"]
+    pricing:
+      input_per_1m_tokens: 0.50
+      output_per_1m_tokens: 1.50
+    vision_capable: false
+    last_updated: "2026-06-01"
+
+# Inference serving providers (for open-source models)
+inference_providers:
+  together:
+    name: "Together AI"
+    models:
+      llama3_70b:
+        input_per_1m_tokens: 0.88
+        output_per_1m_tokens: 0.88
+      llama3_8b:
+        input_per_1m_tokens: 0.10
+        output_per_1m_tokens: 0.10
+      mixtral_8x7b:
+        input_per_1m_tokens: 0.54
+        output_per_1m_tokens: 0.54
+        discontinued: true    # No longer listed on Together AI pricing page as of 2026-06-01
+    last_updated: "2026-06-01"
+
+  groq:
+    name: "Groq"
+    models:
+      llama3_70b:
+        input_per_1m_tokens: 0.59
+        output_per_1m_tokens: 0.79
+      llama3_8b:
+        input_per_1m_tokens: 0.05
+        output_per_1m_tokens: 0.08
+      mixtral_8x7b:
+        input_per_1m_tokens: 0.24
+        output_per_1m_tokens: 0.24
+        discontinued: true    # No longer listed on Groq pricing page as of 2026-06-01
+    last_updated: "2026-06-01"
+
+  fireworks:
+    name: "Fireworks AI"
+    models:
+      llama3_70b:
+        input_per_1m_tokens: 0.90
+        output_per_1m_tokens: 0.90
+      llama3_8b:
+        input_per_1m_tokens: 0.20
+        output_per_1m_tokens: 0.20
+    last_updated: "2026-01-01"

@@ -1,0 +1,70 @@
+name: Weekly Pricing Sync
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"   # Every Monday at 9am UTC
+  workflow_dispatch:       # Allow manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install httpx pyyaml beautifulsoup4 boto3
+
+      - name: Sync cloud pricing (AWS/GCP/Azure)
+        # AWS needs AWS_* creds; GCP needs GCP_BILLING_API_KEY. When a secret is unset the
+        # corresponding provider is skipped cleanly (Azure needs no credentials).
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+          GCP_BILLING_API_KEY: ${{ secrets.GCP_BILLING_API_KEY }}
+        run: python scripts/sync_cloud_pricing.py --auto
+
+      - name: Sync provider pricing (check only)
+        run: python scripts/sync_provider_pricing.py --check-only
+
+      - name: Check for new HuggingFace models
+        run: python scripts/sync_models.py --min-downloads 500000
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet src/infra_advisor/data/ || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Create PR if pricing changed
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "data: update pricing from weekly sync"
+          title: "Weekly pricing update"
+          body: |
+            Automated weekly pricing sync.
+
+            **Review carefully before merging:**
+            - Check that price changes are real and not scraping errors
+            - Verify against provider pricing pages directly
+            - Update `last_updated` fields if accepting changes
+
+            Pricing pages:
+            - OpenAI: https://openai.com/api/pricing/
+            - Anthropic: https://www.anthropic.com/pricing
+            - Google: https://ai.google.dev/pricing
+            - AWS: https://aws.amazon.com/ec2/pricing/on-demand/
+            - GCP: https://cloud.google.com/compute/gpus-pricing
+            - Azure: https://azure.microsoft.com/en-us/pricing/details/machine-learning/
+          branch: "pricing-sync/weekly"
+          delete-branch: true
+          labels: "pricing, automated"
