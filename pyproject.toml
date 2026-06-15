@@ -41,9 +41,9 @@ sync = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/c3-yang-song/infra-advisor-mcp"
-Repository = "https://github.com/c3-yang-song/infra-advisor-mcp"
-Issues = "https://github.com/c3-yang-song/infra-advisor-mcp/issues"
+Homepage = "https://github.com/yangsong7/infra-advisor-mcp"
+Repository = "https://github.com/yangsong7/infra-advisor-mcp"
+Issues = "https://github.com/yangsong7/infra-advisor-mcp/issues"
 
 [project.scripts]
 infra-advisor = "infra_advisor.server:main"
