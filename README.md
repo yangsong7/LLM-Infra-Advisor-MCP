@@ -45,7 +45,7 @@ All numbers are produced by **deterministic Python calculators** (scaling laws, 
 ## Installation
 
 ```bash
-git clone https://github.com/c3-yang-song/infra-advisor-mcp.git
+git clone https://github.com/yangsong7/infra-advisor-mcp.git
 cd infra-advisor-mcp
 
 python -m venv .venv
