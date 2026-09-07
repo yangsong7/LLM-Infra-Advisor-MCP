@@ -99,10 +99,10 @@ azure:
       ram_gb: 900
       networking_gbps: 400
       on_demand_per_hr: 32.77
-      on_demand_per_gpu_hr: 4.1
+      on_demand_per_gpu_hr: 4.0963
       spot_per_hr: 9.83
       spot_per_gpu_hr: 1.23
-      last_updated: '2026-01-01'
+      last_updated: '2026-09-07'
 reserved_discounts:
   aws:
     1yr_no_upfront: 0.25
